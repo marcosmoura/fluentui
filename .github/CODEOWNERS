@@ -241,6 +241,8 @@ packages/react-components/babel-preset-storybook-full-source @microsoft/fluentui
 packages/react-components/react-jsx-runtime @microsoft/teams-prg
 packages/react-components/react-toast @microsoft/teams-prg
 packages/react-components/react-search @microsoft/cxe-coastal
+packages/react-components/slot @microsoft/cxe-prg
+packages/react-components/react-slot @microsoft/cxe-prg
 # <%= NX-CODEOWNER-PLACEHOLDER %>
 
 ## Components

@@ -735,6 +735,13 @@
       "tags": ["vNext", "platform:web"],
       "implicitDependencies": []
     },
+    "@fluentui/react-slot": {
+      "root": "packages/react-components/react-slot",
+      "projectType": "library",
+      "implicitDependencies": [],
+      "sourceRoot": "packages/react-components/react-slot/src",
+      "tags": ["vNext", "platform:web"]
+    },
     "@fluentui/react-spinbutton": {
       "root": "packages/react-components/react-spinbutton",
       "projectType": "library",
@@ -1051,6 +1058,13 @@
       "root": "packages/set-version",
       "projectType": "library",
       "implicitDependencies": []
+    },
+    "@fluentui/slot": {
+      "root": "packages/react-components/slot",
+      "projectType": "library",
+      "implicitDependencies": [],
+      "sourceRoot": "packages/react-components/slot/src",
+      "tags": ["vNext", "platform:web"]
     },
     "@fluentui/ssr-tests": {
       "root": "apps/ssr-tests",
