@@ -138,6 +138,7 @@
       "@fluentui/react-shared-contexts": ["packages/react-components/react-shared-contexts/src/index.ts"],
       "@fluentui/react-skeleton": ["packages/react-components/react-skeleton/src/index.ts"],
       "@fluentui/react-slider": ["packages/react-components/react-slider/src/index.ts"],
+      "@fluentui/react-slot": ["packages/react-components/react-slot/src/index.ts"],
       "@fluentui/react-spinbutton": ["packages/react-components/react-spinbutton/src/index.ts"],
       "@fluentui/react-spinner": ["packages/react-components/react-spinner/src/index.ts"],
       "@fluentui/react-storybook-addon": ["packages/react-components/react-storybook-addon/src/index.ts"],
@@ -159,6 +160,7 @@
       "@fluentui/react-tree": ["packages/react-components/react-tree/src/index.ts"],
       "@fluentui/react-utilities": ["packages/react-components/react-utilities/src/index.ts"],
       "@fluentui/react-virtualizer": ["packages/react-components/react-virtualizer/src/index.ts"],
+      "@fluentui/slot": ["packages/react-components/slot/src/index.ts"],
       "@fluentui/theme-designer": ["packages/react-components/theme-designer/src/index.ts"],
       "@fluentui/tokens": ["packages/tokens/src/index.ts"],
       "@fluentui/workspace-plugin": ["tools/workspace-plugin/src/index.ts"]
