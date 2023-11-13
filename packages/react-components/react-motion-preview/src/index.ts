@@ -8,3 +8,5 @@ export type {
   MotionStylesKeys,
   MotionType,
 } from './hooks';
+
+export { animated } from './utils/animated';
