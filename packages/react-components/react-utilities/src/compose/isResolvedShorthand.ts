@@ -1,4 +1,4 @@
-import { isValidElement } from 'react';
+import * as React from 'react';
 import type { ExtractSlotProps, Slot, SlotPropsDataType } from './types';
 
 /**
@@ -34,5 +34,7 @@ import type { ExtractSlotProps, Slot, SlotPropsDataType } from './types';
 export function isResolvedShorthand<Shorthand extends Slot<SlotPropsDataType>>(
   shorthand?: Shorthand,
 ): shorthand is ExtractSlotProps<Shorthand> {
-  return shorthand !== null && typeof shorthand === 'object' && !Array.isArray(shorthand) && !isValidElement(shorthand);
+  return (
+    shorthand !== null && typeof shorthand === 'object' && !Array.isArray(shorthand) && !React.isValidElement(shorthand)
+  );
 }

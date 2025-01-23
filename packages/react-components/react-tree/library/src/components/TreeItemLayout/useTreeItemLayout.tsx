@@ -39,6 +39,7 @@ export const useTreeItemLayout_unstable = (
 
   const layoutRef = useTreeItemContext_unstable(ctx => ctx.layoutRef);
   const selectionMode = useTreeContext_unstable(ctx => ctx.selectionMode);
+  const navigationMode = useTreeContext_unstable(ctx => ctx.navigationMode ?? 'tree');
 
   const [isActionsVisibleFromProps, onActionVisibilityChange]: [
     TreeItemLayoutActionSlotProps['visible'],
@@ -52,6 +53,7 @@ export const useTreeItemLayout_unstable = (
     state: isActionsVisibleFromProps,
     initialState: false,
   });
+
   const selectionRef = useTreeItemContext_unstable(ctx => ctx.selectionRef);
   const expandIconRef = useTreeItemContext_unstable(ctx => ctx.expandIconRef);
   const actionsRef = useTreeItemContext_unstable(ctx => ctx.actionsRef);
@@ -77,6 +79,9 @@ export const useTreeItemLayout_unstable = (
           event,
           type: event.type,
         } as Extract<TreeItemLayoutActionVisibilityChangeData, { event: typeof event }>);
+        if (event.defaultPrevented) {
+          return;
+        }
         setIsActionsVisible(true);
       }
     },
@@ -85,32 +90,37 @@ export const useTreeItemLayout_unstable = (
 
   const setActionsInvisibleIfNotFromSubtree = React.useCallback(
     (event: FocusEvent | MouseEvent) => {
-      const isRelatedTargetFromActions = Boolean(
-        actionsRefInternal.current && elementContains(actionsRefInternal.current, event.relatedTarget as Node),
-      );
-      if (isRelatedTargetFromActions) {
+      const isRelatedTargetFromActions = () =>
+        Boolean(actionsRefInternal.current && elementContains(actionsRefInternal.current, event.relatedTarget as Node));
+      const isRelatedTargetFromTreeItem = () =>
+        Boolean(treeItemRef.current && elementContains(treeItemRef.current, event.relatedTarget as Node));
+      const isTargetFromActions = () => Boolean(actionsRefInternal.current?.contains(event.target as Node));
+      if (isRelatedTargetFromActions()) {
         onActionVisibilityChange?.(event, {
           visible: true,
           event,
           type: event.type,
         } as Extract<TreeItemLayoutActionVisibilityChangeData, { event: typeof event }>);
+        if (event.defaultPrevented) {
+          return;
+        }
         setIsActionsVisible(true);
         return;
       }
-      const isTargetFromSubtree = Boolean(
-        subtreeRef.current && elementContains(subtreeRef.current, event.target as Node),
-      );
-      if (!isTargetFromSubtree) {
-        onActionVisibilityChange?.(event, {
-          visible: false,
-          event,
-          type: event.type,
-        } as Extract<TreeItemLayoutActionVisibilityChangeData, { event: typeof event }>);
-        setIsActionsVisible(false);
+      if (isTargetFromActions() && isRelatedTargetFromTreeItem()) {
         return;
       }
+      onActionVisibilityChange?.(event, {
+        visible: false,
+        event,
+        type: event.type,
+      } as Extract<TreeItemLayoutActionVisibilityChangeData, { event: typeof event }>);
+      if (event.defaultPrevented) {
+        return;
+      }
+      setIsActionsVisible(false);
     },
-    [subtreeRef, setIsActionsVisible, onActionVisibilityChange],
+    [setIsActionsVisible, onActionVisibilityChange, treeItemRef],
   );
 
   const expandIcon = slot.optional(props.expandIcon, {
@@ -125,7 +135,7 @@ export const useTreeItemLayout_unstable = (
   if (expandIcon) {
     expandIcon.ref = expandIconRefs;
   }
-  const arrowNavigationProps = useArrowNavigationGroup({ circular: true, axis: 'horizontal' });
+  const arrowNavigationProps = useArrowNavigationGroup({ circular: navigationMode === 'tree', axis: 'horizontal' });
   const actions = isActionsVisible
     ? slot.optional(props.actions, {
         defaultProps: { ...arrowNavigationProps, role: 'toolbar' },
@@ -134,6 +144,7 @@ export const useTreeItemLayout_unstable = (
     : undefined;
   delete actions?.visible;
   delete actions?.onVisibilityChange;
+
   const actionsRefs = useMergedRefs(actions?.ref, actionsRef, actionsRefInternal);
   const handleActionsBlur = useEventCallback((event: React.FocusEvent<HTMLDivElement>) => {
     if (isResolvedShorthand(props.actions)) {
@@ -155,7 +166,7 @@ export const useTreeItemLayout_unstable = (
   const hasActions = Boolean(props.actions);
 
   React.useEffect(() => {
-    if (treeItemRef.current && hasActions && isActionsVisibleFromProps === undefined) {
+    if (treeItemRef.current && hasActions) {
       const treeItemElement = treeItemRef.current;
 
       const handleMouseOver = setActionsVisibleIfNotFromSubtree;
@@ -175,13 +186,7 @@ export const useTreeItemLayout_unstable = (
         treeItemElement.removeEventListener('blur', handleBlur);
       };
     }
-  }, [
-    hasActions,
-    treeItemRef,
-    isActionsVisibleFromProps,
-    setActionsVisibleIfNotFromSubtree,
-    setActionsInvisibleIfNotFromSubtree,
-  ]);
+  }, [hasActions, treeItemRef, setActionsVisibleIfNotFromSubtree, setActionsInvisibleIfNotFromSubtree]);
 
   return {
     components: {

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { getIntrinsicElementProps, slot } from '@fluentui/react-utilities';
+import { getIntrinsicElementProps, slot, useEventCallback } from '@fluentui/react-utilities';
 import type { ColorPickerProps, ColorPickerState } from './ColorPicker.types';
-
 /**
  * Create the state required to render ColorPicker.
  *
@@ -12,20 +11,29 @@ import type { ColorPickerProps, ColorPickerState } from './ColorPicker.types';
  * @param ref - reference to root HTMLDivElement of ColorPicker
  */
 export const useColorPicker_unstable = (props: ColorPickerProps, ref: React.Ref<HTMLDivElement>): ColorPickerState => {
+  const { color, onColorChange, shape, ...rest } = props;
+
+  const requestChange: ColorPickerState['requestChange'] = useEventCallback((event, data) => {
+    onColorChange?.(event, {
+      type: 'change',
+      event,
+      color: data.color,
+    });
+  });
+
   return {
-    // TODO add appropriate props/defaults
     components: {
-      // TODO add each slot's element type or component
       root: 'div',
     },
-    // TODO add appropriate slots, for example:
-    // mySlot: resolveShorthand(props.mySlot),
     root: slot.always(
       getIntrinsicElementProps('div', {
         ref,
-        ...props,
+        ...rest,
       }),
       { elementType: 'div' },
     ),
+    color,
+    requestChange,
+    shape,
   };
 };

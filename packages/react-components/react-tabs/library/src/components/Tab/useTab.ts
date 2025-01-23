@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTabsterAttributes } from '@fluentui/react-tabster';
 import {
   getIntrinsicElementProps,
   mergeCallbacks,
@@ -40,6 +41,10 @@ export const useTab_unstable = (props: TabProps, ref: React.Ref<HTMLElement>): T
   const onTabClick = useEventCallback(mergeCallbacks(onClick, onSelectCallback));
   const onTabFocus = useEventCallback(mergeCallbacks(onFocus, onSelectCallback));
 
+  const focusProps = useTabsterAttributes({
+    focusable: { isDefault: selected },
+  });
+
   React.useEffect(() => {
     onRegister({
       value,
@@ -75,6 +80,7 @@ export const useTab_unstable = (props: TabProps, ref: React.Ref<HTMLElement>): T
         // FIXME: value is not a valid prop for button
         value,
         ...rest,
+        ...focusProps,
         disabled,
         onClick: onTabClick,
         onFocus: selectTabOnFocus ? onTabFocus : onFocus,

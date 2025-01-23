@@ -4,12 +4,7 @@
   "private": true,
   "type": "commonjs",
   "generators": "./generators.json",
-  "scripts": {
-    "test": "jest --passWithNoTests",
-    "type-check": "node  ./scripts/type-check.mjs",
-    "lint": "eslint --ext .ts,.js,.json .",
-    "check-graph": "node ./scripts/check-dep-graph.js"
-  },
+  "executors": "./executors.json",
   "dependencies": {
     "@nx/devkit": "~19.5.7"
   },
