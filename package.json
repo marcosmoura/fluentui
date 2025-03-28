@@ -282,7 +282,7 @@
     "monosize-bundler-webpack": "0.1.5",
     "monosize-storage-azure": "0.0.15",
     "node-plop": "0.25.0",
-    "nx": "19.8.14",
+    "nx": "20.6.4",
     "p-queue": "6.6.2",
     "parse-diff": "0.7.1",
     "path-browserify": "1.0.1",
