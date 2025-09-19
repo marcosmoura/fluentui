@@ -45,7 +45,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Load PR number
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         id: pr_number
         with:
           script: |
@@ -99,7 +99,7 @@ jobs:
             Pull request demo site: [URL](${{needs.deploy.outputs.website_url}})
 
       - name: Update PR deploy site GitHub status
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const run = require('./.github/scripts/deploy-pr-site-status');
